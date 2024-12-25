@@ -14,6 +14,8 @@ export default [
   {
     rules: {
       "semi": 2,
+      "comma-dangle": ["error", "never"],
+      "object-curly-spacing": ["error", "always"],
       "@typescript-eslint/consistent-type-imports": [
         2,
         {
@@ -35,7 +37,9 @@ export default [
             }
           ]
         }
-      ]
+      ],
+      "react/react-in-jsx-scope": "off",
+      "react/jsx-uses-react": "off"
     }
   }
 ];
