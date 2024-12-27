@@ -47,6 +47,8 @@ const App = () => {
     return !isEqual(savedDrawing.content, currentContent);
   }, [savedDrawing, currentContent] );
 
+  console.log(">>>>>>>> contentHasChanged", contentHasChanged);
+
   return (
     <div className="App">
       <h1 style={{ textAlign: "center" }}>Excalidraw Example</h1>

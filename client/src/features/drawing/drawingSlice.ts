@@ -61,7 +61,7 @@ export const drawingSlice = createAppSlice({
       async () => {
         const response = await fetchDrawingList();
         // The value we return becomes the `fulfilled` action payload
-        return response.drawingList;
+        return response;
       },
       {
         pending: state => {
@@ -80,7 +80,10 @@ export const drawingSlice = createAppSlice({
       async (title: string) => {
         const response = await fetchDrawing(title);
         // The value we return becomes the `fulfilled` action payload
-        return response;
+        return {
+          title,
+          content: response.data
+        };
       },
       {
         pending: state => {

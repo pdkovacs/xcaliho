@@ -20,7 +20,9 @@ export const OpenDrawingDialog = ({ open, onClose }: OpenDrawingDialogProps) => 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(getDrawingList());
+    if (open) {
+      dispatch(getDrawingList());
+    }
   }, [open]);
 
   const handleOk = () => {
@@ -58,11 +60,15 @@ interface DrawingSelectorProps {
 }
 
 const DrawingSelector = ({ drawingTitles: drawingTitles, selectedDrawing, onChange }:  DrawingSelectorProps) => {
+  const selectedTitle = selectedDrawing || drawingTitles[0] || "";
+  useEffect(() => {
+    onChange(selectedTitle);
+  }, [selectedTitle]);
   return (
     <Select className={style.openSaveDrawingDialogContent}
       label="Drawing"
       onChange={event => onChange(event.target.value)}
-      value={selectedDrawing || drawingTitles[0]}
+      value={selectedTitle}
     >{
         drawingTitles.map(drawingTitle => <MenuItem key={drawingTitle} value={drawingTitle}>{drawingTitle}</MenuItem>) 
     }</Select>

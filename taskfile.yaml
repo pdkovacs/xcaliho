@@ -1,0 +1,8 @@
+version: '3'
+
+tasks:
+  backend:
+    cmds:
+      - |
+        cd backend
+        go build -o myxcaliapp-backend

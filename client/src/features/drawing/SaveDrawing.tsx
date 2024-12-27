@@ -1,9 +1,10 @@
-import { Alert, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
+import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { saveDrawingContent, selectCurrentDrawingContent, selectSavedDrawing, selectSaveDrawingStatus } from "./drawingSlice";
 
 import style from "./Drawing.module.css";
+import { useReporters } from "../../utils/use-reporters";
 
 interface SaveDrawingDialogProps {
   readonly open: boolean;
@@ -20,10 +21,26 @@ export const SaveDrawingDialog = ({ open, onClose }: SaveDrawingDialogProps) => 
 
   const dispatch = useAppDispatch();
 
+  const { reportError } = useReporters();
+
+  useEffect(() => {
+    if (savingStatus === "failed") {
+      reportError("Failed to save drawing");
+    }
+  }, [savingStatus]);
+
   const handleOk = () => {
-    dispatch(saveDrawingContent({ title: selectedTitle || savedDrawing.title, content: currentContent }));
+    dispatch(saveDrawingContent({ title: selectedTitle, content: currentContent }));
     onClose();
   };
+
+  const titleToOffer = selectedTitle || savedDrawing.title;
+
+  console.log(">>>>>>> selectedTitle: ", selectedTitle, ", savedDrawing.title: ", savedDrawing.title, ", titleToOffer:", titleToOffer);
+
+  useEffect(() => {
+    setSelectedTitle(titleToOffer);
+  }, [titleToOffer]);
 
   return (
     <Dialog
@@ -37,9 +54,9 @@ export const SaveDrawingDialog = ({ open, onClose }: SaveDrawingDialogProps) => 
             ? <div className={style.fetchInProgress}>
                 <CircularProgress />
               </div>
-            : savingStatus === "failed"
-              ? <Alert severity="error">Failed to save drawing</Alert>
-              : <TitleSelector title={selectedTitle || savedDrawing.title} onChange={title => setSelectedTitle(title)}/>
+            : savingStatus === "idle"
+              ? <TitleSelector title={titleToOffer} onChange={title => setSelectedTitle(title)}/>
+              : null
         }</div>
       }
       </DialogContent>
