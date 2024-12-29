@@ -155,7 +155,7 @@ func (store *DrawingStore) listObjectKeys(ctx context.Context, prefix string, om
 	return keys, err
 }
 
-func sessionId() string {
+func SessionId() string {
 	buf := make([]byte, 32)
 
 	_, err := rand.Read(buf)
